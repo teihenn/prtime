@@ -1,0 +1,7 @@
+bitbucket:
+  apiKeyPath: "path/to/your/bitbucket_api_key.txt"
+  repositories:
+    - owner: "example-owner"
+      repo: "example-repo1"
+    - owner: "example-owner"
+      repo: "example-repo2"
