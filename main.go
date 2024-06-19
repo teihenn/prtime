@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/teihenn/rrader/internal/config"
+	"github.com/teihenn/prtime/internal/config"
 )
 
 func main() {
