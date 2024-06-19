@@ -2,4 +2,4 @@ bitbucket:
   apiKeyPath: "path/to/your/bitbucket_api_key.txt"
   repositories:
     - owner: "teihenn"
-      repo: "static-code-analysis-test"
+      name: "static-code-analysis-test"

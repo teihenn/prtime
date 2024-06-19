@@ -11,7 +11,7 @@ type Config struct {
 		ApiKeyPath   string `yaml:"apiKeyPath"`
 		Repositories []struct {
 			Owner string `yaml:"owner"`
-			Repo  string `yaml:"repo"`
+			Name  string `yaml:"name"`
 		} `yaml:"repositories"`
 	} `yaml:"bitbucket"`
 }
