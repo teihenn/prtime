@@ -1,5 +1,5 @@
 bitbucket:
-  apiKeyPath: "path/to/your/bitbucket_api_key.txt"
   repositories:
     - owner: "teihenn"
       name: "static-code-analysis-test"
+      apiKeyPath: "/Users/y_yoshida/.api-tokens/bitbucket/static-code-analysis-test-access-token.txt"
