@@ -8,10 +8,10 @@ import (
 
 type Config struct {
 	Bitbucket struct {
-		Repositories []struct {
-			Owner      string `yaml:"owner"`
-			Name       string `yaml:"name"`
-			ApiKeyPath string `yaml:"apiKeyPath"`
+		AllRepoApiKeyPath string `yaml:"allRepoApiKeyPath"`
+		Repositories      []struct {
+			Owner string `yaml:"owner"`
+			Name  string `yaml:"name"`
 		} `yaml:"repositories"`
 	} `yaml:"bitbucket"`
 }

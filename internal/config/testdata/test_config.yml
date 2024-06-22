@@ -1,5 +1,5 @@
 bitbucket:
-  apiKeyPath: "expected/api/key/path"
+  allRepoApiKeyPath: "expected/api/key/path"
   repositories:
     - owner: "expectedOwner1"
       name: "expectedRepoName1"

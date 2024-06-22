@@ -16,13 +16,18 @@ func TestLoadConfig(t *testing.T) {
 	}
 
 	/* ----- assert ----- */
+	expectedApiKeyPath := "expected/api/key/path"
+	if actual.Bitbucket.AllRepoApiKeyPath != expectedApiKeyPath {
+		t.Errorf("expected %s, got %s",
+			expectedApiKeyPath, actual.Bitbucket.AllRepoApiKeyPath)
+	}
+
 	expectedRepositories := []struct {
-		Owner      string
-		Name       string
-		ApiKeyPath string
+		Owner string
+		Name  string
 	}{
-		{Owner: "expectedOwner1", Name: "expectedRepoName1", ApiKeyPath: "expected/api/key/path"},
-		{Owner: "expectedOwner2", Name: "expectedRepoName2", ApiKeyPath: "expected/api/key/path"},
+		{Owner: "expectedOwner1", Name: "expectedRepoName1"},
+		{Owner: "expectedOwner2", Name: "expectedRepoName2"},
 	}
 
 	if len(actual.Bitbucket.Repositories) != len(expectedRepositories) {
@@ -33,12 +38,11 @@ func TestLoadConfig(t *testing.T) {
 		if actual.Bitbucket.Repositories[i].Owner != repo.Owner ||
 			actual.Bitbucket.Repositories[i].Name != repo.Name {
 			t.Errorf(
-				"expected repository %d: owner=%s, name=%s, apiKeyPath=%s; "+
-					"got owner=%s, name=%s, apiKeyPath=%s",
-				i, repo.Owner, repo.Name, repo.ApiKeyPath,
+				"expected repository %d: owner=%s, name=%s; "+
+					"got owner=%s, name=%s",
+				i, repo.Owner, repo.Name,
 				actual.Bitbucket.Repositories[i].Owner,
 				actual.Bitbucket.Repositories[i].Name,
-				actual.Bitbucket.Repositories[i].ApiKeyPath,
 			)
 		}
 	}
