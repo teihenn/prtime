@@ -31,8 +31,8 @@ func main() {
 
 		fmt.Printf("Pull Requests for %s/%s:\n", repo.Owner, repo.Name)
 		for _, pr := range prs {
-			fmt.Printf("- %d: %s by %s\n, status=%s, created at %v",
-				pr.ID, pr.Title, pr.Author.Username, pr.State, pr.CreatedOn)
+			fmt.Printf("- %d: %s by %s\n, status=%s, comment_count=%d, created at %v",
+				pr.ID, pr.Title, pr.Author.Username, pr.State, pr.CommentCount, pr.CreatedOn)
 		}
 	}
 }
