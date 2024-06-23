@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
+	"sort"
+	"time"
 
 	"github.com/teihenn/prtime/internal/config"
 	"github.com/teihenn/prtime/internal/model"
@@ -114,11 +115,36 @@ func (b *BitbucketService) GetPullRequests(owner, repo string) ([]model.PullRequ
 		Values []model.PullRequest `json:"values"`
 	}
 
-	log.Printf("%v", data)
-
 	if err := json.Unmarshal(body, &data); err != nil {
 		return nil, err
 	}
 
 	return data.Values, nil
+}
+
+// DisplaySortedPRs displays pull requests sorted by their open duration in descending order.
+func (b *BitbucketService) DisplaySortedPRs() {
+	jst, _ := time.LoadLocation(("Asia/Tokyo"))
+
+	for _, repo := range b.Repositories {
+		prs, err := b.GetPullRequests(repo.Owner, repo.Name)
+		if err != nil {
+			fmt.Printf("Error retrieving pull requests for %s/%s: %s\n",
+				repo.Owner, repo.Name, err)
+			continue
+		}
+
+		sort.Slice(prs, func(i, j int) bool {
+			return time.Since(prs[i].CreatedOn) > time.Since((prs[j].CreatedOn))
+		})
+
+		fmt.Printf("Pull Requests for %s/%s:\n", repo.Owner, repo.Name)
+		for _, pr := range prs {
+			openDuration := time.Since(pr.CreatedOn)
+			daysOpen := openDuration.Hours() / 24
+			createdOnFormattedJst := pr.CreatedOn.In(jst).Format("2006-01-02 15:04")
+			fmt.Printf("[%d] %s by %s, Open for %.1f days(created on %s)\n",
+				pr.ID, pr.Title, pr.Author.Username, daysOpen, createdOnFormattedJst)
+		}
+	}
 }
