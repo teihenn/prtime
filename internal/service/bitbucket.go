@@ -122,10 +122,3 @@ func (b *BitbucketService) GetPullRequests(owner, repo string) ([]model.PullRequ
 
 	return data.Values, nil
 }
-
-// GetPullRequestDetails fetches details for a specific pull request.
-func (b *BitbucketService) GetPullRequestDetails(owner, repo string, prID int) (model.PullRequest, error) {
-	// Call Bitbucket API to fetch detailed data for a pull request
-	pr := model.PullRequest{}
-	return pr, nil
-}

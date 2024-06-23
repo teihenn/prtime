@@ -21,10 +21,3 @@ func (g *GitHubService) GetPullRequests(owner, repo string) ([]model.PullRequest
 	pr := []model.PullRequest{}
 	return pr, nil
 }
-
-// GetPullRequestDetails fetches details for a specific pull request.
-func (g *GitHubService) GetPullRequestDetails(owner, repo string, prID int) (model.PullRequest, error) {
-	// Call GitHub API to fetch detailed data for a pull request
-	pr := model.PullRequest{}
-	return pr, nil
-}
