@@ -22,17 +22,5 @@ func main() {
 		return
 	}
 
-	for _, repo := range bitbucketService.Repositories {
-		prs, err := bitbucketService.GetPullRequests(repo.Owner, repo.Name)
-		if err != nil {
-			fmt.Printf("Error retrieving pull requests for %s/%s: %s\n", repo.Owner, repo.Name, err)
-			continue
-		}
-
-		fmt.Printf("Pull Requests for %s/%s:\n", repo.Owner, repo.Name)
-		for _, pr := range prs {
-			fmt.Printf("- %d: %s by %s\n, status=%s, comment_count=%d, created at %v",
-				pr.ID, pr.Title, pr.Author.Username, pr.State, pr.CommentCount, pr.CreatedOn)
-		}
-	}
+	bitbucketService.DisplaySortedPRs()
 }
