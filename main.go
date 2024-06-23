@@ -23,7 +23,7 @@ func main() {
 	}
 
 	for _, repo := range bitbucketService.Repositories {
-		prs, err := bitbucketService.ListPullRequests(repo.Owner, repo.Name)
+		prs, err := bitbucketService.GetPullRequests(repo.Owner, repo.Name)
 		if err != nil {
 			fmt.Printf("Error retrieving pull requests for %s/%s: %s\n", repo.Owner, repo.Name, err)
 			continue

@@ -15,8 +15,8 @@ func NewGitHubService(token string) *GitHubService {
 	return &GitHubService{Token: token}
 }
 
-// ListPullRequests retrieves a list of pull requests from a specific repository.
-func (g *GitHubService) ListPullRequests(owner, repo string) ([]model.PullRequest, error) {
+// GetPullRequests retrieves a list of pull requests from a specific repository.
+func (g *GitHubService) GetPullRequests(owner, repo string) ([]model.PullRequest, error) {
 	// Call GitHub API to fetch pull requests and convert to model.PullRequest
 	pr := []model.PullRequest{}
 	return pr, nil

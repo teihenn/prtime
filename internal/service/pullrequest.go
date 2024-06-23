@@ -6,6 +6,6 @@ import "github.com/teihenn/prtime/internal/model"
 
 // PullRequestService defines the interface for operations related to pull requests.
 type PullRequestService interface {
-	ListPullRequests(owner, repo string) ([]model.PullRequest, error)
+	GetPullRequests(owner, repo string) ([]model.PullRequest, error)
 	GetPullRequestDetails(owner, repo string, prID int) (model.PullRequest, error)
 }

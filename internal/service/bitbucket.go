@@ -75,8 +75,8 @@ func loadApiKey(apiKeyPath, repoName string) (string, error) {
 	return apiKey, nil
 }
 
-// ListPullRequests retrieves a list of pull requests from a specific repository.
-func (b *BitbucketService) ListPullRequests(owner, repo string) ([]model.PullRequest, error) {
+// GetPullRequests retrieves a list of pull requests from a specific repository.
+func (b *BitbucketService) GetPullRequests(owner, repo string) ([]model.PullRequest, error) {
 	var apiKey string
 	for _, r := range b.Repositories {
 		if r.Owner == owner && r.Name == repo {
