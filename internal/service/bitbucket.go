@@ -57,6 +57,48 @@ func NewBitbucketService(cfg config.Config) (*BitbucketService, error) {
 	}, nil
 }
 
+// GetSortedPRs get all pull requests from all repositories specified in config.yml
+// and sort them by open duration in descending order.
+func (b *BitbucketService) GetSortedPRs() map[string][]model.PullRequest {
+	var ret map[string][]model.PullRequest = make(map[string][]model.PullRequest)
+	for _, repo := range b.Repositories {
+		prs, err := b.getPullRequests(repo.Owner, repo.Name)
+		if err != nil {
+			fmt.Printf("Error retrieving pull requests for %s/%s: %s\n",
+				repo.Owner, repo.Name, err)
+			continue
+		}
+
+		sort.Slice(prs, func(i, j int) bool {
+			return time.Since(prs[i].CreatedOn) > time.Since((prs[j].CreatedOn))
+		})
+
+		key := repo.Owner + "/" + repo.Name
+		ret[key] = prs
+	}
+	return ret
+}
+
+// DisplaySortedPRs displays pull requests sorted by their open duration in descending order.
+func (b *BitbucketService) DisplaySortedPRs() {
+	jst, _ := time.LoadLocation(("Asia/Tokyo"))
+
+	reposPRs := b.GetSortedPRs()
+
+	for _, repo := range b.Repositories {
+		fmt.Printf("Pull Requests for %s/%s:\n", repo.Owner, repo.Name)
+		key := repo.Owner + "/" + repo.Name
+		prs := reposPRs[key]
+		for _, pr := range prs {
+			openDuration := time.Since(pr.CreatedOn)
+			daysOpen := openDuration.Hours() / 24
+			createdOnFormattedJst := pr.CreatedOn.In(jst).Format("2006-01-02 15:04")
+			fmt.Printf("[%d] %s by %s, Open for %.1f days(created on %s)\n",
+				pr.ID, pr.Title, pr.Author.Username, daysOpen, createdOnFormattedJst)
+		}
+	}
+}
+
 func loadApiKey(apiKeyPath, repoName string) (string, error) {
 	data, err := os.ReadFile(apiKeyPath)
 	if err != nil {
@@ -76,8 +118,8 @@ func loadApiKey(apiKeyPath, repoName string) (string, error) {
 	return apiKey, nil
 }
 
-// GetPullRequests retrieves a list of pull requests from a specific repository.
-func (b *BitbucketService) GetPullRequests(owner, repo string) ([]model.PullRequest, error) {
+// getPullRequests retrieves a list of pull requests from a specific repository.
+func (b *BitbucketService) getPullRequests(owner, repo string) ([]model.PullRequest, error) {
 	var apiKey string
 	for _, r := range b.Repositories {
 		if r.Owner == owner && r.Name == repo {
@@ -120,31 +162,4 @@ func (b *BitbucketService) GetPullRequests(owner, repo string) ([]model.PullRequ
 	}
 
 	return data.Values, nil
-}
-
-// DisplaySortedPRs displays pull requests sorted by their open duration in descending order.
-func (b *BitbucketService) DisplaySortedPRs() {
-	jst, _ := time.LoadLocation(("Asia/Tokyo"))
-
-	for _, repo := range b.Repositories {
-		prs, err := b.GetPullRequests(repo.Owner, repo.Name)
-		if err != nil {
-			fmt.Printf("Error retrieving pull requests for %s/%s: %s\n",
-				repo.Owner, repo.Name, err)
-			continue
-		}
-
-		sort.Slice(prs, func(i, j int) bool {
-			return time.Since(prs[i].CreatedOn) > time.Since((prs[j].CreatedOn))
-		})
-
-		fmt.Printf("Pull Requests for %s/%s:\n", repo.Owner, repo.Name)
-		for _, pr := range prs {
-			openDuration := time.Since(pr.CreatedOn)
-			daysOpen := openDuration.Hours() / 24
-			createdOnFormattedJst := pr.CreatedOn.In(jst).Format("2006-01-02 15:04")
-			fmt.Printf("[%d] %s by %s, Open for %.1f days(created on %s)\n",
-				pr.ID, pr.Title, pr.Author.Username, daysOpen, createdOnFormattedJst)
-		}
-	}
 }
