@@ -57,6 +57,8 @@ func NewBitbucketService(cfg config.Config) (*BitbucketService, error) {
 	}, nil
 }
 
+// GetSortedPRs get all pull requests from all repositories specified in config.yml
+// and sort them by open duration in descending order.
 func (b *BitbucketService) GetSortedPRs() map[string][]model.PullRequest {
 	var ret map[string][]model.PullRequest = make(map[string][]model.PullRequest)
 	for _, repo := range b.Repositories {
